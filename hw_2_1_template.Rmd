@@ -1,0 +1,92 @@
+---
+title: 'Ch 2.1 Practice: Probability Basics'
+author: "Khaled Alhudhain"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+**NOTE: Please show your calculations for all problems to receive full credit!**
+
+# 1. One hundred students were asked their opinions of two textbook formats: hardback ($A$) and paperback ($B$). Their responses to three questions are: 60 said they like format $A$, 65 said they like $B$, and 25 said that they like both. 
+
+## a. Draw a Venn diagram that depicts the above situation (you can use the Visual editor as with HW 1 to insert a picture you draw outside of R).
+
+a: Population of group A $\\$
+b: Population of group B $\\$
+c: Population of intersection of group A and B (both) $\\$
+d: Population outside of two groups $\\$
+Equations: $\\$
+I) a + b + c + d = 100 $\\$
+II) a + c = 60 $\\$
+III) b + c = 65 $\\$
+IV) c = 25 $\\$
+
+from (II), (IV) we have: a = 60 - c = 60 - 25 = 35 $\\$
+from (III), (IV) we have: b = 60 - c = 65 - 25 = 40 $\\$
+
+which will leave d = 0
+
+
+```{r Venn2, echo=FALSE, fig.cap="Venn Diagram", out.width = '100%'}
+knitr::include_graphics("Venn2.jpg")
+```
+
+\newpage
+\newpage
+
+## b. What is the probability that someone likes neither?
+
+Someone likes neither means it is not in group A nor is in B. $\\$
+Thus, it means the probability of people outside the 2 circles of the Venn diagram. As we calculated, d(which shows # of people outside A,B) = 0. $\\$
+Hence, Probability(someone likes neither) = d/(a + b+ c + d) = 0/100 = 0
+
+## c. What is the probability that someone likes exactly one?
+
+P(Exactly one) = P(only A) + P(only B) = a/(a+b+c+d) + b/(a+b+c+d) = 35/100 + 40/100 = 0.35 + 0.4 = 0.75
+
+## d. What is the probability that someone likes at least one?
+
+P(Atleast one) = P(Exactly one) + P(Both) = 0.75 + 25/100 = 0.75 + 0.25 = 1
+
+## e. What is the probability that someone likes at most one?
+
+P(Atmost one) = P(Exactly one) + P(None) = 0.75 + d/100 = 0.75 + 0 = 0.75
+
+\newpage
+# 2. Consider two events, $A$ and $B$, with $P(A)=0.35$ and $P(B)=0.75$. Determine the *maximum* and *minimum* values for $P(A\cap B)$ and the conditions under which each of these values is attained.
+
+
+When one event is completely contained within the other, Maximum for $P(A\cap B)$ occurs.  $\\$
+Now, since P(A) = 0.35 and P(B) = 0.75, B should contain A inside itself and the maximum is $P(A\cap B)$ = P(A) = 0.35   $\\$
+
+The minimum occurs when A and B are disjoint except for the overlap that maintains the individual probabilities. $\\$
+
+In this case, minimum is: $P(A\cap B)$ = P(A) + P(B) - 1 = 0.35 + 0.75 - 1 = 0.1
+
+
+\newpage
+# 3. Let $A$ and $B$ be any two events defined on the sample space $S$. Suppose that $P(A)=0.3$, $P(B)=0.6$, and $P(A\cap B)=0.2$. What is the probability that $A$ or $B$ *but not both* occur?
+
+P(only A) = P(A) - $P(A\cap B)$ = 0.3 - 0.2 = 0.1  $\\$
+P(only B) = P(B) - $P(A\cap B)$ = 0.6 - 0.2 = 0.4  $\\$
+
+P($A$ or $B$ *but not both*) = P(only A) + P(only B) = 0.1 + 0.4 = 0.5
+
+
+\newpage
+# 4. Let $A$ and $B$ be two events defined on the sample space $S$. If the probability that at least one of them occurs is 0.4 and the probability that $A$ occurs but $B$ does not occur is 0.15, what is $P(B)$?
+
+P(Atleast one) =  P(Exactly one) + P(Both) = [ P(only A) + P(only B) ] + $P(A\cap B)$ = 0.4  $\\$
+
+P(only A) = 0.15  $\\$
+P(only B) = P(B) - $P(A\cap B)$  $\\$
+
+P(Atleast one) = 0.15 + [ P(B) - $P(A\cap B)$ ] + $P(A\cap B)$ = 0.4 $\\$
+
+Hence: $\\$ 
+0.15 + P(B) = 0.4  $\\$
+
+And P(B) = 0.4 - 0.15 = 0.25
+

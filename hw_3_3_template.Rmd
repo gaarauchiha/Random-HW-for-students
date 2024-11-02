@@ -1,0 +1,214 @@
+---
+title: "Ch 3.3-3.6 Practice: Functions of Random Variables and Named Discrete Distributions"
+author: "Khaled Alhudhain"
+output: pdf_document
+---
+
+
+
+# 1. (20 pts) Let $X$ be a discrete random variable with pmf given by 
+P(X=0)=1/4, P(X=1)=1/2, P(X=2)=1/8, P(X=3)=1/8
+
+## a. Find the pmf of $Y=X-1$.
+
+
+P(Y=-1) = P(X=0) = 1/4 = 0.25
+
+
+P(Y=0) = P(X=1) = 1/2 = 0.5
+
+
+P(Y=1) = P(X=2) = 1/8 = 0.125
+
+
+P(Y=2) = P(X=3) = 1/8 = 0.125
+
+
+## b. Find the theoretical pmf of $V=(X-1)^{2}$.
+Note that there are two ways to get V = 1, so the pmf needs to be simplified. 
+
+
+P(V=0) = P(X=1) = 1/2 = 0.5
+
+
+
+
+P(V=1) = P(X=0) + P(X=2) = 1/4+ 1/8 = 0.375
+
+
+
+P(V=4) = P(X=3) = 1/8 = 0.125
+
+
+
+## c. Calculate the theoretical values for $E(V)$ and $Var(V)$. 
+
+
+
+$E(V)$ = 0(P(V=0)) + 1(P(V=1)) + 4(P(V=4)) = 0 + 0.375 + 4(0.125) = 0.875
+
+
+
+$E(V^2)$ = (0^2)(P(V=0)) + (1^2)(P(V=1)) + (4^2)(P(V=4)) = 0 + 0.375 + 16(0.125) = 2.375
+
+
+
+$Var(V)$ = $E(V^2)$ - $(E(V))^2$ = 2.375 - (0.875)^2 = 103/64 = 1.609375
+
+
+
+
+## d. Estimate $E(V)$ and $Var(V)$ using simulation. 
+
+```{r}
+
+set.seed(777)
+
+n <- 100000
+
+X <- sample(0:3, n, replace = TRUE, prob = c(1/4, 1/2, 1/8, 1/8))
+
+V <- (X - 1)^2
+
+E_V <- mean(V)
+
+Var_V <- var(V)
+
+cat("Simulated E(V) = ", E_V, "\n")
+cat("Simulated Var(V) = ", Var_V, "\n")
+```
+
+
+
+
+\newpage
+# 2. (10 pts) Let $X$ be a random variable with mean $\mu$ and standard deviation $\sigma$. Use the properties of the variance to find the mean and standard deviation of $\frac{X-\mu}{\sigma}$.
+
+Mean:  E[$\frac{X-\mu}{\sigma}$] = ${\frac{1}\sigma}$E[{$X-\mu$}] = ${\frac{1}\sigma}$(E[X] - $\mu$ ) = ${\frac{1}\sigma}$($\mu$ - $\mu$ ) = 0
+
+
+Variance: Var[$\frac{X-\mu}{\sigma}$] = ${(\frac{1}\sigma)^2}$Var[{$X-\mu$}] = ${(\frac{1}\sigma)^2}$(Var[X] - Var[$\mu$] ) = ${(\frac{1}\sigma)^2}$(Var[X] - 0 ) = ${(\frac{1}\sigma)^2}$($\sigma^2$) = 1
+
+\newpage
+# 3. (20 pts) A recent national study showed that approximately 45\% of college students binge drink. Let $X$ equal the number of students in a random sample of size $n=12$ who binge drink. Using both the pmf by hand, and R commands, find the probability that
+
+## a. $X$ is at most 2.
+
+
+
+P(X<=2) = P(X = 0) + P(X = 1) + P(X = 2) = (0.55^12)C(12,0) + (0.55^11) (0.45^1) C(12,1) + (0.55^10) (0.45^2) C(12,2) = 0.0421419826
+
+
+
+## b. $X$ is at least 1.
+
+
+P(X >= 1) = 1 - P(X = 0) = 1 - (0.55^12)C(12,0) = 0.999233782
+
+
+## c. Use simulation to obtain the mean and variance of $X$. 
+```{r}
+set.seed(777)
+
+n_sim <- 100000
+
+n <- 12
+p <- 0.45
+
+X_sim <- rbinom(n_sim, n, p)
+
+mean_X <- mean(X_sim)
+var_X <- var(X_sim)
+
+cat("Average of X = ", mean_X, "\n")
+cat("Var of X = ", var_X, "\n")
+```
+
+
+\newpage
+# 4. (20 pts) There is a .85 probabilty that Avery will show up to work exactly on time (not 1 minute late), independent of any other day. This week, it's crunch time on a huge project, and employees are expected to come in every day of the week. The company gives a $100 bonus for every employee that shows up to work exactly on time at least 5 days in a week. 
+
+## a. Assuming the work week starts on Sunday (as day 1 of 7), what is the probability that Avery gets this bonus by Thursday?
+
+
+He has to show up every day from Sunday to Thursday since there are 5 days between them inclusive:
+
+P(X = 5) = (0.85)^5 = 0.4437
+
+
+
+
+
+## b. What day on average will Avery get this bonus?
+
+
+Binomial distribution: E[X] = n/p = 5/0.85 = 5.88
+
+So, on average, he will get the bonus in about 6 days or on "Sunday + 6 days" = Saturday
+
+## c. What is the probability that Avery won't get this bonus?
+
+
+
+P(X < 5) = 1- (P(X = 5) + P(X = 6) + P(X = 7)) = 0.07376516
+
+
+
+\newpage
+
+# 5. (10 pts) Flaws in a certain type of drapery material appear on the average of two in 150 square feet.  If we assume a Poisson distribution, find the probability of at most 2 flaws in 450 square feet.
+
+
+
+lambda for 150 square feet = 2
+
+
+So, lamda for 450 square feet = 2*3 = 6
+
+
+
+P( X <= 2) = P(X = 0) + P(X = 1) + P(X = 2) = e^(-6) (6^0 / 0!) + e^(-6) (6^1 / 1!) + e^(-6) (6^2 / 2!) = e^(-6) * [ 1 + 6 + 18] = 25(e^-6) = 0.0619688 
+
+
+
+
+\newpage
+
+# 6. (20 pts) In the game of Scrabble, players make words using letter tiles. The tiles consist of 42 vowels and 58 non-vowels.
+
+## a. If a player draws 7 tiles, what is the probability of getting 7 vowels?
+
+Total # of tiles = 42 + 58 = 100
+
+
+P(7 vowels) = C(42,7) / C(100,7) = 59163 / 35104300 = 0.001685349
+
+
+
+## b. If a player draws 7 tiles, what is the probability of 2 or fewer vowels?
+
+X: # of drawn vowels
+
+
+P(X <= 2) = P(X = 0) + P(X = 1) + P(X = 2) = C(58,7)/C(100,7) + (C(58,6) C(42,1))/C(100,7) + (C(58,5) C(42,2))/C(100,7) = 47415 / 127652 = 0.3714395387
+
+
+## c. What is the expected number of vowels drawn when drawing 7 tiles?
+
+
+Hyper-Geometric Dist:
+
+
+E[X] = n*K/N = 7(42)/100 = 2.94
+
+
+
+## d. What is the standard deviation of the number of vowels drawn when drawing 7 tiles?
+
+
+Hyper-Geometric Dist:
+
+Std = sqrt(n(K/N)((N-K)/N)((N-n)/(N-1))) = sqrt(7(0.42)(0.58)(93 / 99)) = 1.26564
+
+
+

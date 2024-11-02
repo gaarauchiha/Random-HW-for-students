@@ -1,0 +1,203 @@
+---
+title: "Ch 3.2 Practice: Expected value"
+author: "Khaled Alhudhain"
+output: pdf_document
+---
+
+
+# 1. (20 pts) Suppose that a hat contains slips of papers containing the numbers 1, 2, and 3. Two slips of paper are drawn at the same time and the numbers on the slips are multiplied together. Calculate the expected value of the product of the numbers on the slips of paper. Confirm your results using simulation.
+
+
+* Theoretical expected value
+
+
+We can draw (1,3), (2,3), (1,2). So, the possible outcomes are:
+
+
+1*3 = 3
+
+
+1*2 = 2
+
+
+2*3 = 6
+
+
+
+probability of each of these outcomes are: p = 1 / C(3,2)  = 1/3
+
+
+Thus:
+
+
+
+E[X] = (3)(1/3) + (2)(1/3) + (6)(1/3) = 11/3
+
+
+* Confirm via simulation
+
+```{r}
+set.seed(777)
+n_sim <- 100000
+
+outcomes <- c(1, 2, 3)
+
+simulate_product <- function() {
+  draw <- sample(outcomes, 2, replace = FALSE)
+  prod(draw)
+}
+
+res1 <- replicate(n_sim, simulate_product())
+
+expected_res1 <- mean(res1)
+cat("Expected value from simulating is  =", expected_res1, "\n")
+
+```
+
+\newpage
+
+# 2. (40 pts) In the summer of 2020, the U.S. was considering *pooled testing* of COVID-19. This problem explores the math behind pooled testing. Since the availability of tests is limited, the testing center proposes the following pooled testing technique:
+
+  1. Two samples are randomly selected and combined. The combined sample is tested.
+  2. If the combined sample tests negative, then both people are assumed negative.
+  3. If the combined sample tests positive, then both people need to be retested for the disease.
+  
+Suppose in a certain population, 5 percent of the people being tested for COVID-19 actually have COVID-19, and that individuals' test results are independent. Assume the test is 100% accurate, so if the person is negative they will always test negative. Let $X$ be the total number of tests that are run in order to test two randomly selected people.
+
+## a.  What is the pmf of $X$? Explain in words or symbols & equations how you calculated your probabilities. 
+
+Probability of two cases being negative is: P(X = 1) = 0.95 * 0.95 = 0.9025 where we i=only used one test that's why X = 1
+
+
+Probability pooled case being positive is 1 - p = 0.0975 in which case we need additional two more tests to detect which of two (or both) have made the result positive. So: P(X=3) = 0.0975
+
+
+So, PMF is:
+
+
+
+P(X = 1) = 0.9025
+
+
+P(X = 3) = 0.0975
+
+
+
+## b. What is the theoretical expected value of $X$? Write your answer out in a sentence.
+
+
+
+Expected value for number of tests needed for testing two people using pooled testing is E[X] = 1(0.9025 + 3(0.0975) = 1.195
+
+
+## c. Now consider this process if three samples are combined. Let $Y$ be the total number of tests that are run in order to test three randomly selected people. If the pooled test is positive, then all three people need to be retested individually. **Use simulation to calculate the expected number of tests**
+
+> Hint: The function `ifelse()` can be useful here. Try `ifelse(number_positive == 0, 1, 4)`. This returns a 1 if the value of `number_positive` is equal to 0, and 4 otherwise (if number_positive is not 0). 
+
+```{r}
+set.seed(777)
+
+p2 <- 0.05
+n_sim2 <- 100000
+
+simulate_tests <- function() {
+
+  number_positive <- sum(runif(3) < p2)
+
+  ifelse(number_positive == 0, 1, 4)
+}
+
+tests <- replicate(n_sim2, simulate_tests())
+
+exp_val2 <- mean(tests)
+cat("Expected value from simulating is  =", exp_val2, "\n")
+```
+
+
+
+## d. If your only concern is to minimize the expected number of tests given to the population, would you recommending pooling 2 or 3 samples together?
+
+Since expected number of samples for "pooling **3** samples together" is less, this one is for choice since our only concern is minimizing expected number of tests.
+
+
+
+\newpage
+# 3. (40 pts) How costly is it to fly? An airline charges the following baggage fees: $25 for the first bag and $35 for the second. Suppose 54% of passengers have no checked luggage, 34% have one piece of checked luggage and 12% have two pieces. We suppose a negligible portion of people check more than two bags.
+
+## a. Define a random variable using a sentence. No R code here.  
+
+
+
+Assume that the random variable **R** shows the revenue generated from baggage fees per passenger.
+
+
+
+## b. Build a probability model (pmf) for the revenue per passenger for the airline.
+
+
+
+Note that for 2nd bag they charge 25 + 35 = $ 60
+
+
+
+P(R = 0) = 0.54
+
+
+P(R = 25) = 0.34
+
+
+P(R = 60) = 0.12
+
+
+
+## c. Compute the theoretical average revenue per passenger. Confirm using simulation. 
+
+* Theoretical
+
+
+
+E[R] = 0(0.54) + 25(0.34) + 60(0.12) = 15.7
+
+
+
+* Simulation
+
+```{r}
+set.seed(777)
+num_passengers <- 1000000
+probabilities <- c(0.54, 0.34, 0.12)
+revenues <- c(0, 25, 60)
+
+passenger_choices <- sample(revenues, num_passengers, replace = TRUE, prob = probabilities)
+average_revenue_simulation <- mean(passenger_choices)
+
+average_revenue_simulasimulatingtion  <- mean(passenger_choices)
+cat("Average Revenue per passenger  is  =", average_revenue_simulation , "\n")
+```
+
+
+## d. Compute the corresponding standard deviation. Confirm using simulation. 
+
+* Theoretical
+
+
+
+E[R^2] = (0^2)(0.54) + (25^2)(0.34) + (60^2)(0.12) = 644.5
+
+
+
+Var[R] = E[R^2] - E^2[R] = 644.5 - (15.7)^2 = 398.01
+
+
+
+Standard Deviation = sqrt(398.01) = 19.95
+
+
+
+* Simulation 
+```{r}
+std_sim3 <- sd(passenger_choices)
+cat("Standard Deviation of generated revenue from simulating is  =", std_sim3 , "\n")
+```
+
+

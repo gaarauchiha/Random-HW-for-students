@@ -1,0 +1,238 @@
+---
+title: "Ch 3.1 Practice: Probability Mass Functions"
+author: "Khaled Alhudhain"
+output: pdf_document
+---
+
+**NOTE: Please show all work to ensure full credit for each question!**
+
+**1.  (20 pts) Let $X$ be a discrete random variable with probability mass function given by**
+
+|      |     |     |     |     |
+|:----:|:---:|:---:|:---:|:---:|
+|  X   |  0  |  1  |  2  |  3  |
+| p(x) | 1/8 | 1/4 | 1/2 | 1/8 |
+
+a.  **Verify that $p$ is a valid probability mass function. Explain your reasoning.**
+
+
+All probabilities are between zero and one (Inclusive), so this criteria has been met.
+Now, we need to check if probabilities add up to 1:
+
+```{r}
+p0 = 1/8
+p1 = 1/4
+p2 = 1/2
+p3 = 1/8
+p_total <- p0 + p1 + p2 + p3
+p_total
+```
+
+
+p(0) + p(1) + p(2) + p(3) = 1/8 + 1/4 + 1/2 + 1/8 = 1
+
+so, this is a valid PMF
+
+
+b.  **Find $P(X\geq 2)$.**
+
+```{r}
+p_geq_2 <- p2 + p3
+p_geq_2
+```
+p(X >= 2) = p(X=2) + p(X=3) = 1/2 + 1/8 = 5/8 = 0.625
+
+
+c.  **Find $P(X\geq 2|X\geq 1)$.**
+
+```{r}
+p_geq_1 <- p1 + p2 + p3
+
+p_geq2_if_geq1 <- p_geq_2 / p_geq_1
+p_geq2_if_geq1
+```
+p(X >= 1) = p(X=1) + p(X=2) + p(X=3) = 1/4 + 1/2 + 1/8 = 7/8 = 0.875
+p(X >= 2) = p(X=2) + p(X=3) = 1/2+ 1/8 = 5/8 = 0.625
+
+p(X >= 2 | X >= 1 ) = p(X >= 2) / p(X >= 1) = 0.625/0.875 = 5/7 = 0.7142857
+
+d.  **Find $P(X\geq 2 \cup X\geq 1)$.**
+
+$P(X\geq 2 \cup X\geq 1)$ = P(X >= 1) = p(X=1) + p(X=2) + p(X=3) = 1/4 + 1/2 + 1/8 = 7/8 = 0.875
+
+e. **Use simulation to estimate the pmf of $X$, using the provided values above. **
+
+```{r}
+set.seed(777)
+sample_size <- 100000
+pmf <- c(0.125, 0.25, 0.5, 0.125) # Probabilities
+x_values <- c(0, 1, 2, 3)
+random_choice <- sample(x_values, size=sample_size, prob=pmf, replace=TRUE) # Sampling with replacement
+
+simulated_pmf <- table(factor(random_choice, levels=x_values)) / sample_size # Freq. table by diving # of samples by sample size
+simulated_pmf
+```
+
+
+f. **Use your simulated sample from above what is the estimate of $P(X \geq 2)$? Is your result close to the actual value?**
+
+```{r}
+P_X_ge_2_simulated <- sum(simulated_pmf[3:4]) # Sum of probabilities for X=2 and X=3
+P_X_ge_2_simulated
+```
+Actual value was 0.625 which is very close to what we found by simulation (0.62403). Thus, simulation result DO ALIGN with actual value.
+
+
+\newpage
+
+**2.  (10 pts) Let $X$ be a discrete random variable with pmf given by**
+
+|      |     |     |     |
+|:----:|:---:|:---:|:---:|
+|  X   |  0  |  1  |  2  |
+| p(x) |  c  | c/2 | c/6 |
+
+**Find the value of $C$ that makes $p$ a valid probability mass function.**
+
+Probabilities add up to 1:
+
+c + c/2 + c/6 = 5c/3 = 1
+
+```{r}
+c = 1/(1 + 1/2 + 1/6)
+c
+```
+
+
+so:
+
+c = 3/5 = 0.6
+
+
+
+\newpage
+
+
+**3. (20 pts) Suppose a particle moves along the x-axis beginning at 0. It moves one integer to the left or right with equal probability. Use simulation to estimate the probability distribution of its position after four steps, listing your results. Then, plot this distribution.**
+
+move left: (-1)
+move right: (1)
+
+```{r}
+
+set.seed(777)
+
+num_sim <- 100000
+num_steps <- 4
+
+positions <- replicate(num_sim, {
+  sum(sample(c(-1, 1), num_steps, replace = TRUE)) # Simulating 4 movement of left=-right binary movement for 100000 times, Sum will be the final position
+})
+
+distribution <- table(positions) / num_sim # PMF
+print(distribution)
+
+barplot(distribution, main = "PMF of position of particle",
+        xlab = "Position", ylab = "Probability")
+
+```
+
+
+
+
+\newpage
+
+
+**4. (15 pts) Let's learn a bit about your campus. Go to the Chico State Institutional Research Factbook here: https://www.csuchico.edu/ir/fact-book/index.shtml. Click on the "Enrollment" box. You should now see a dashboard with a bubble chart in the middle. This display shows the percent of students currently enrolled in majors from each college. Click on the tiny little bubble and select "Exclude" because we can't tell what college those students are from. So lets not worry about them for now. **
+
+**Use the percentages of students enrolled in each college at our university to simulate the probability that in a group of 10 students selected at random, at least one other person is in the same major as you.**
+
+```{r}
+set.seed(777)
+
+num_sim <- 1000000
+
+probabilities <- c(0.1444, 0.0693, 0.1183, 0.0471, 0.249, 0.057, 0.1793, 0.1357) # Prob. of Engineering in campus = 0.1444
+
+simulation4 <- function() {
+  sim1 <- sample(1:8, 10, replace = TRUE, prob = probabilities) # Sample of 10 studens from 8 colleges
+  sum(sim1 == 1) >= 1
+}
+
+results <- replicate(num_sim, simulation4())
+
+probability <- mean(results)
+probability
+
+```
+
+
+
+
+\newpage
+
+**5. (15 pts) Let $X$ be the number of siblings of Chico State students. Ask at least 15 other students how many siblings they have and report the PMF below (Hint: It'll be easier to coordinate this through the Discord server). **
+
+No siblings: 3
+One sibling: 6
+Two siblings: 5
+Three siblings: 1
+
+
+
+
+
+
+P(X = 0) = 3/15 = 0.2
+P(X = 1) = 6/15 = 0.4
+P(X = 2) = 5/15 = 0.333
+P(X = 3) = 1/15 = 0.067
+
+
+\newpage
+
+**6. (20 pts) Fifty people put their names in a hat. They then all randomly choose one name from the hat. Let $X$ be the number of people who get their own name. Estimate the PMF of $X$ using simulation, reporting your results. Then create a plot that visualizes the PMF.**
+
+
+
+```{r}
+
+library(ggplot2)
+
+set.seed(777)
+
+n <- 50
+trials <- 10000
+
+results <- numeric(trials)
+
+for (i in 1:trials) {
+  
+    names <- sample(1:n)
+    results[i] <- sum(names == (1:n))
+}
+
+pmf_x <- table(results) / trials # Probabilities
+
+pmf_df <- as.data.frame(pmf_x)
+colnames(pmf_df) <- c("Number_of_people_getting_own_name", "PMF")
+
+print(pmf_df)
+
+ggplot(pmf_df, aes(x = Number_of_people_getting_own_name, y = PMF)) +
+    geom_bar(stat = "identity", fill = "green", alpha = 0.8) +
+    labs(x = "# of people getting thier Own name)",
+         y = "PMF",
+         title = " PMF of number of people who get their own name using simulation") +
+    theme_classic()
+
+```
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,47 @@
+---
+title: "Chapter 2.3 Practice: Conditional Probability"
+author: "Your name here"
+output: pdf_document
+---
+
+**NOTE: Please be sure you show all work for problems to receive full credit!**
+
+# 1. (30 pts) A hat contains eight slips of paper with the numbers 1 through 8 written on them. Two slips of paper are drawn from the hat without replacement and the sum of the numbers is computed.
+
+## a. What is the probability that the sum of the numbers is *exactly* 12?
+
+
+
+## b. What is the probability that the sum of the numbers is at *least* 12?
+
+
+## c. What is the probability that the sum of the numbers is *exactly 12, given that it is at least 12*? (NOTE: You do not need to run simulation again--your answers in 1b and 1c can be used here)
+
+
+
+\newpage
+# 2. (15 pts) Roll two dice, one white and one red. Consider these events and explain your reasoning for the questions that follow (you do not necessarily need to reference formulas for all of them):
+
+* A: The sum is 7
+* B: The white die is odd
+* C: The red die has a larger number showing than the white
+* D: The dice match (doubles)
+
+## a. Which pair(s) of events are *disjoint*?
+
+
+## b. Which pair(s) are *independent*?
+
+
+## c. Which pair(s) are *neither disjoint nor independent*?
+
+\newpage
+
+# 3. (15 pts) Let $A$ and $B$ be events. Show through formulas and set operation laws/properties that $P(A\cup B|B)=1$.
+
+\newpage
+# 4. (20 pts) Suppose a fair, six-sided die is tossed three times. Let $A$ be the event *the first toss is a 4*. Let $B$ be the event *the first toss is the largest number rolled* (the largest can be a tie). Determine via simulation whether $A$ or $B$ are independent.
+
+
+\newpage
+# 5. (20 pts) Bob Ross was a painter with a PBS television show ``The Joy of Painting'' that ran for 11 years. One report showed that 91% of Bob's paintings contain a happy little tree, 85% contain two or more happy trees. What is the probability that he painted a second happy tree to be a friend for the first happy tree (in other words, painted a second given that he painted a first)?

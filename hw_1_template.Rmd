@@ -1,0 +1,122 @@
+---
+title: 'Ch 1 Practice: Example homework'
+author: "Khaled Alhudhain"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+Each question asks you to write some code. Some will also ask you to answer a question or write some math. Type your answers in full complete sentences with reasonable grammar. Knit this file to PDF **after each question**, and submit the completed PDF with all your work on Canvas.
+
+# 1. Let `x <- c(1,2,3)` and `y <- c(6,5,4)`. Explain the math that is happening to the numbers when you run each of the following statements.
+
+```{r}
+x <- c(1,2,3)
+y <- c(6,5,4)
+
+```
+
+We create two vectors of length 3, x and y.
+
+## a) $x^2$
+
+```{r}
+x^2
+```
+
+After assigning values for the vector x which has length 3, by squaring this vector, each element of x is squared individually. So, the result will be (1^2, 2^2, 3^2) or (1, 4, 9)
+
+## b) $xy$
+
+```{r}
+x*y
+```
+xy will give us the "element by element multiplication" of x and y vectors (both has length 3). So xy = (1×6, 2×5, 3×4) = (6, 10, 12)
+
+## c) $x_1y_2$
+
+```{r}
+x[1] * y[2]
+```
+Multiplying first element of vector x, x[1], with second element of vector y, y[2], will give us: x[1] × y[2] = 1 × 5 = 5
+
+\newpage
+
+# 2. What is the sum of the squares of all integers from 20 to 50 (e.g. $20^{2}+21^{2}+\cdots +50^{2}$)?
+
+```{r}
+z <- (20:50)
+z_squared <-z^2
+sum(z_squared)
+```
+Fisrt, we declare a vector z which contains all integers from 20 to 50. Then, we perfrom element by element square of this vector as we discussed before. Finally, we sum all elements of squared vector which will give us 40455.
+
+\newpage
+
+# 3. What is the sum of the first 100 positive integers? The formula for the sum of integers 1 through $n$ is $\frac{n(n+1)}{2}$.
+
+*Hint: Define* $n=100$ and then use R to compute the sum of 1 through 100 using the formula.
+
+```{r}
+
+n <- 100
+sum_of_first_100 <- n * (n + 1) / 2
+sum_of_first_100 
+
+```
+Defining n=100 and using the given formula, sum of the first 100 positive integers is 5040.
+\newpage
+
+# 4. Graph the function $f(p) = p(1-p)$ where $p$ is a continuous number between 0 and 1.
+
+*Hint:* You don't need to define EVERY value between 0 and 1--just enough to define the general shape of the function.
+
+```{r}
+
+p <- seq(0, 1, length.out = 100)
+f_p <- p * (1 - p)
+plot(p, f_p, type = "l", main = "f(p) = p(1-p)", xlab = "p", ylab = "f(p)")
+
+```
+
+\newpage
+
+# 5. Switch to the visual editor for the next few questions.
+
+## a. Insert a picture that you find inspiring.
+
+
+![Night Sky](data:image/jpeg;base64,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)
+
+
+## b. Write an equation using both display math, and inline math. You can look up references outside this class if you like.
+
+# Inline Math Example
+
+The formula for the slope of a line connecting (x~1~,y~1~) and (x~2~,y~2~) is \(m = \frac{y_2 - y_1}{x_2 - x_1}\).
+
+
+
+
+# Display Math Example
+
+The quadratic formula is:
+
+$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+## c. Insert a code chunk and do some math (any equation works, so long as it's in a code chunk).
+```{r}
+
+a = 3;
+b = 4;
+c = sqrt(a^2 + b^2); # Some Basic Math as required in this question
+cat("If two sideds of a right triangle are a=3 and b=4, then the hypotenuse is equal to ",c) 
+
+```
+
+
+## d. Sign up for the MATH-350 Discord channel, then make a post in the #introductions channel with the following: your name, major, your pets (if any), and your biggest concern for the class.
