@@ -1,0 +1,186 @@
+---
+title: "Ch 4.1 Practice: PDFs and CDFs"
+author: "Khaled Alhudhain"
+output: pdf_document
+---
+
+# 1. (30 pts) Let $X$ be a random variable with pdf given by $f(X)=2x$ for $0\leq x\leq 1$ and 0 otherwise.
+
+## a. Find $P(X\geq 1/2)$
+
+
+$P(X\geq 1/2)$ = integral(2x) from x= 1/2 to x=1 = $x^2$ from x= 1/2 to x=1 = 1^2 - (1/2)^2 = 1 - 1/4 = 3/4 = 0.75
+
+
+
+Code:
+
+```{r}
+p_1a<- function() {
+  integrate(function(x) 2 * x, lower = 0.5, upper = 1)$value
+}
+p_1a()
+```
+
+
+
+## b. Find $P(X\geq1/2|X\geq 1/4)$.
+
+
+$P(X\geq1/2|X\geq 1/4)$ = $P(X\geq1/2 \bigcap X\geq 1/4)  \div P( X\geq 1/4)$ 
+
+
+
+$P(X\geq1/2|X\geq 1/4)$ = (x^2 from x= 1/2 to x=1) / (x^2 from x= 1/4 to x=1) = (1^2 - (1/2)^2) / (1^2 - (1/4)^2) = (3/4)/(15/16) = 4/5 = 0.8
+
+
+code:
+
+
+```{r}
+p_1b <- function() {
+  integrate(function(x) 2 * x, lower = 0.25, upper = 1)$value
+}
+output_1b <- function() {
+  p_1a() /p_1b()
+}
+output_1b()
+```
+
+
+
+
+
+\newpage
+# 2. (20 pts) Let $X$ be a random variable with pdf given below. Find the constant c such that this is a valid pdf. 
+
+$$
+f(x)= \Bigg\{
+\begin{array}{cc}
+cx^{2} & \mbox{for }0 \leq x < 1 \\
+c(2-x)^{2} & \mbox{for }1 \leq x \leq 2 \\
+0  & otherwise.
+\end{array}
+$$
+Integral of f(x) over all its domain has to be equal to 1.
+
+
+[inetgral(cx^2) from x = 0 to x = 1] + [inetgral(c(2-x)^2) from x = 1 to x = 2] = c[(x^3)/3  from x = 0 to x = 1] + c[((x-2)^3)/3  from x = 1 to x = 2] = 1
+
+So:
+
+c[1/3] + c[0+1/3] = 1
+
+which means that:
+
+c = 3/2 = 1.5
+
+
+code:
+
+
+
+```{r}
+Q_2 <- function() {
+  integral1 <- integrate(function(x) x^2, lower = 0, upper = 1)$value
+  integral2 <- integrate(function(x) (2 - x)^2, lower = 1, upper = 2)$value
+  c <- 1 / (integral1 + integral2)
+  return(c)
+}
+Q_2()
+```
+
+\newpage
+# 3. (30 pts) Suppose that the p.d.f. of a random variable $X$ is as follows:
+
+$$
+f(x)= \Big\{ \begin{array}{cc} 
+\frac{1}{8}x & for\ 0\leq x \leq 4 \\
+0 & otherwise.
+\end{array}
+$$
+
+## a. Find the value of $t$ such that P$(X\leq t)=1/4$.
+
+
+P$(X\leq t)$ = $\int_{0}^{t} (x/8)   dx$ = (x^2)/16 from x = 0 to x = t = $\frac{t^2}{16}$ = 1/4 
+
+which means:
+
+
+$t^2$  = 4
+
+and since t is non-negative:
+
+t = 2
+
+
+
+code:
+
+```{r}
+Q_3a <- function() {
+  solve <- function(t) (1/16) * t^2 - 1/4
+  round(uniroot(solve, lower = 0, upper = 4)$root)
+}
+Q_3a()
+
+```
+
+
+## b. Find the value of $t$ such that P($X\geq t)=1/3$.
+
+
+P($X\geq t$ = $\int_{t}^{4} (x/8)   dx$ = (x^2)/16 from x = t to x = 4 = $\frac{16-t^2}{16}$ = 1/3
+
+
+
+which means:
+
+
+16 - $t^2$  = $\frac{16}{3}$
+
+
+which gives:
+
+
+$t^2$ = $\frac{32}{3}$
+
+and since t is non-negative:
+
+t = $\sqrt{\frac{32}{3}}$
+
+
+
+code:
+
+```{r}
+Q_3b <- function() {
+  solve <- function(t) 1 - (1/16) * t^2 - 1/3
+  uniroot(solve, lower = 0, upper = 4)$root
+}
+Q_3b()
+
+```
+
+
+\newpage
+# 4. (20 pts) Let $f(y)=\frac{3}{2}y^{2}$ for $-1\leq y\leq 1$. Find $P(|Y-\frac{1}{2}|<\frac{1}{4})$.
+
+
+$P(|Y-\frac{1}{2}|<\frac{1}{4})$ = $P(\frac{-1}{4} < Y-\frac{1}{2}<\frac{1}{4})$ = $P(\frac{1}{4} < Y<\frac{3}{4})$
+
+
+P($\int_{1/4}^{3/4}\frac{3}{2}y^{2} dy$) = $\frac{y^3}{2}$  from x = 3/4 to x = 1/4 = (1/2)[ (27/64) - (1/64) ] = 13/64
+
+
+code:
+
+
+```{r}
+Q_4 <- function() {
+  integrate(function(y) (3/2) * y^2, lower = 1/4, upper = 3/4)$value
+}
+Q_4()
+```
+
